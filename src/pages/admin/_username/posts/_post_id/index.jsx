@@ -6,7 +6,6 @@ import PostDetailView from "components/Post/PostDetailView";
 class AdminPostView extends Component {
     static propTypes = {
         match: PropTypes.object.isRequired,
-        userSession: PropTypes.object.isRequired
     };
 
     render() {

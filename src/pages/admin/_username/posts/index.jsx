@@ -33,7 +33,7 @@ class AdminPosts extends Component {
 
     render() {
         const { posts } = this.state;
-        const { username, userSession } = this.context.state;
+        const { username } = this.context.state.currentUser;
 
         return (
             <Card>
@@ -42,7 +42,6 @@ class AdminPosts extends Component {
                         <PostsTable
                             posts={posts}
                             username={username}
-                            userSession={userSession}
                         />
                     </Content>
                 </Card.Content>
