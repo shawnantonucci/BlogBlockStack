@@ -9,6 +9,7 @@ class AdminPostCreate extends Component {
             <PostForm
                 username={username}
                 userSession={userSession}
+                type="create"
             />
         )
     }

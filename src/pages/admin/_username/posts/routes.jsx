@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import AdminPostCreate from "pages/admin/_username/posts/create";
 import AdminPosts from "pages/admin/_username/posts";
 import AdminPostView from "pages/admin/_username/posts/_post_id";
+import AdminPostEdit from "pages/admin/_username/posts/_post_id/edit";
 class AdminUsernamePostsRoutes extends Component {
     static propTypes = {
         match: PropTypes.object.isRequired
@@ -28,7 +29,7 @@ class AdminUsernamePostsRoutes extends Component {
                 />
                 <Route
                     path={`${this.props.match.url}/:post_id/edit`}
-                    render={() => <div>Admin edit page</div>}
+                    render={({ match }) => <AdminPostEdit match={match} />}
                 />
             </Switch>
         );
