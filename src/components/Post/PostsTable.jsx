@@ -8,17 +8,41 @@ class PostsTable extends Component {
     static propTypes = {
         userSession: PropTypes.object.isRequired,
         username: PropTypes.string.isRequired,
-        posts: PropTypes.array.isRequired
+        posts: PropTypes.array.isRequired,
+        history: PropTypes.object.isRequired
     };
+
+    viewAdminPost(post) {
+        const { history, username } = this.props;
+
+        return history.push(`/admin/${username}/posts/${post.id}`);
+    }
 
     displayAdminOptions(post) {
         return (
             <React.Fragment>
-                <Button className="mr-one" color="warning" onClick={() => console.log("Editing Button")}>Edit</Button>
-                <Button className="mr-one" color="info" onClick={() => console.log("Viewing Button")} >View</Button>
-                <Button color="danger" onClick={() => console.log("Delete Button")} >Delete</Button>
+                <Button
+                    className="mr-one"
+                    color="warning"
+                    onClick={() => console.log("Editing Button")}
+                >
+                    Edit
+                </Button>
+                <Button
+                    className="mr-one"
+                    color="info"
+                    onClick={() => this.viewAdminPost(post)}
+                >
+                    View
+                </Button>
+                <Button
+                    color="danger"
+                    onClick={() => console.log("Delete Button")}
+                >
+                    Delete
+                </Button>
             </React.Fragment>
-        )
+        );
     }
 
     render() {
@@ -34,17 +58,15 @@ class PostsTable extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {
-                        _.map(posts, (post) => {
-                            return (
-                                <tr key={post.id}>
-                                    <td>{post.id}</td>
-                                    <td>{post.title}</td>
-                                    <td>{this.displayAdminOptions(post)}</td>
-                                </tr>
-                            )
-                        })
-                    }
+                    {_.map(posts, post => {
+                        return (
+                            <tr key={post.id}>
+                                <td>{post.id}</td>
+                                <td>{post.title}</td>
+                                <td>{this.displayAdminOptions(post)}</td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </Table>
         );
