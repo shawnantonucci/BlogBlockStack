@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import { withRouter } from "react-router-dom";
-import { Button, Checkbox, Form } from "semantic-ui-react";
+import { Button, Form } from "semantic-ui-react";
 import { POST_FILENAME } from "utils/contants";
 import generateUUID from "utils/generateUUID";
 
@@ -39,11 +39,6 @@ class PostForm extends Component {
         }
 
         return null;
-    };
-
-    seeRandom = async () => {
-        const { userSession } = this.props;
-        await userSession.getFile("random.json", { decrypt: false });
     };
 
     createPost = async () => {
@@ -103,7 +98,6 @@ class PostForm extends Component {
         console.log(this.state.posts);
         return (
             <div>
-                <Button onClick={this.seeRandom}>See Random</Button>
                 <Form onSubmit={this.onSubmit}>
                     <Form.Field>
                         <label>Title</label>
