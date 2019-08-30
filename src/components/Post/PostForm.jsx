@@ -7,14 +7,38 @@ import { POST_FILENAME } from "utils/contants";
 import generateUUID from "utils/generateUUID";
 
 class PostForm extends Component {
-    state = {
-        title: "",
-        description: ""
-    };
+    constructor(props) {
+        super(props);
+
+        const { post = {} } = props;
+
+        this.state = {
+            title: post.title || "", // returns an edited post or starting a new post
+            description: post.description || "", // returns an edited post or starting a new post
+            posts: []
+        };
+    }
 
     static propTypes = {
         userSession: PropTypes.object.isRequired,
         username: PropTypes.string.isRequired
+    };
+
+    componentDidMount() {
+        this.loadPosts();
+    }
+
+    loadPosts = async () => {
+        const { userSession } = this.props;
+        const options = { decrypt: false };
+
+        const result = await userSession.getFile(POST_FILENAME, options);
+
+        if (result) {
+            return this.setState({ posts: JSON.parse(result) });
+        }
+
+        return null;
     };
 
     seeRandom = async () => {
@@ -24,19 +48,44 @@ class PostForm extends Component {
 
     createPost = async () => {
         const options = { encrypt: false };
-        const { title, description } = this.state;
+        const { title, description, posts } = this.state;
         const { history, userSession, username } = this.props;
+        const id = generateUUID();
 
+        // for posts.json
         const params = {
+            id,
             title,
+        };
+
+        // for post-${post-id}.json
+        // { id, title, description }
+        const detailParams = {
+            ...params,
             description
         };
 
-        await userSession.putFile(
-            "random.json",
-            JSON.stringify(params),
-            options
-        );
+        try {
+            await userSession.putFile(
+                POST_FILENAME,
+                JSON.stringify([...posts, params]),
+                options
+            );
+            await userSession.putFile(
+                `post-${id}.json`,
+                JSON.stringify(detailParams),
+                options
+            );
+            this.setState(
+                {
+                    title: "",
+                    description: ""
+                },
+                () => history.push(`/admin/${username}/posts`)
+            );
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     onChange = e => {
@@ -51,6 +100,7 @@ class PostForm extends Component {
     };
 
     render() {
+        console.log(this.state.posts);
         return (
             <div>
                 <Button onClick={this.seeRandom}>See Random</Button>
