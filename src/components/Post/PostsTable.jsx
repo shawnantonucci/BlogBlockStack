@@ -8,13 +8,19 @@ class PostsTable extends Component {
     static propTypes = {
         username: PropTypes.string.isRequired,
         posts: PropTypes.array.isRequired,
-        history: PropTypes.object.isRequired
+        history: PropTypes.object.isRequired,
+        deletePost: PropTypes.func.isRequired,
+        type: PropTypes.string
     };
 
-    editAdminPost(post) {
-        const {history, username} = this.props
+    deletePost(post) {
+        this.props.deletePost(post.id);
+    }
 
-        return history.push(`/admin/${username}/posts/${post.id}/edit`)
+    editAdminPost(post) {
+        const { history, username } = this.props;
+
+        return history.push(`/admin/${username}/posts/${post.id}/edit`);
     }
 
     viewAdminPost(post) {
@@ -40,10 +46,7 @@ class PostsTable extends Component {
                 >
                     View
                 </Button>
-                <Button
-                    color="danger"
-                    onClick={() => console.log("delete")}
-                >
+                <Button color="danger" onClick={() => this.deletePost(post)}>
                     Delete
                 </Button>
             </React.Fragment>

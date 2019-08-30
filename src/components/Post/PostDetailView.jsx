@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Card, Heading, Content } from "react-bulma-components";
+import { withRouter } from "react-router-dom";
 
 class PostDetailView extends Component {
     state = {
@@ -8,12 +9,14 @@ class PostDetailView extends Component {
     };
 
     static propTypes = {
+        username: PropTypes.string.isRequired,
         userSession: PropTypes.object.isRequired,
-        match: PropTypes.object.isRequired
+        match: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
     };
 
     componentDidMount = async () => {
-        const { userSession, match } = this.props;
+        const { userSession, match, history, username } = this.props;
         const options = { decrypt: false };
 
         const result = await userSession.getFile(
@@ -25,7 +28,7 @@ class PostDetailView extends Component {
             return this.setState({ post: JSON.parse(result) });
         }
 
-        return null;
+        return history.push(`/admin/${username}/posts`);
     };
 
     render() {
@@ -45,4 +48,4 @@ class PostDetailView extends Component {
     }
 }
 
-export default PostDetailView;
+export default withRouter(PostDetailView);
