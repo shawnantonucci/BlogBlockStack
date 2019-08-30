@@ -36,7 +36,7 @@ class Routes extends Component {
                         )}
                     />
                     <Route
-                        exact
+                        // exact
                         path="/admin/:username"
                         render={({ match }) => (
                             <AdminUsernameRoute match={match} />
