@@ -10,18 +10,37 @@ import {
 import { withRouter } from "react-router-dom";
 
 class AdminUsername extends Component {
+    state = {
+        searchedWord: ""
+    };
+
     static propTypes = {
         username: PropTypes.string.isRequired
     };
 
     navigateToCreatePost = () => {
-        const { history, username } = this.props
+        const { history, username } = this.props;
 
-        history.push(`/admin/${username}/posts/create`)
-    }
+        history.push(`/admin/${username}/posts/create`);
+    };
+
+    onChange = e => {
+        this.setState({ searchedWord: e.target.value });
+    };
+
+    onKeyPress = e => {
+        const { searchedWord } = this.state;
+        const { history } = this.props;
+
+        if (e.key === "Enter") {
+            return history.push(`/${searchedWord}/posts`);
+        }
+    };
 
     render() {
         const { username } = this.props;
+
+        console.log(this.state.searchedWord);
 
         return (
             <div className="admin-username">
@@ -35,6 +54,24 @@ class AdminUsername extends Component {
                             >
                                 Create Post
                             </Button>
+                            <div className="mt-one">
+                                <Columns>
+                                    <Columns.Column size={6}>
+                                        <div className="field">
+                                            <label className="label">
+                                                Explore user's posts!
+                                            </label>
+                                            <input
+                                                type="text"
+                                                className="input"
+                                                placeholder="Type here"
+                                                onChange={this.onChange}
+                                                onKeyPress={this.onKeyPress}
+                                            />
+                                        </div>
+                                    </Columns.Column>
+                                </Columns>
+                            </div>
                         </Content>
                     </Card.Content>
                 </Card>
