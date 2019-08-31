@@ -5,6 +5,7 @@ import { MyContext } from "components/User/UserProvider";
 import { POST_FILENAME } from "utils/contants";
 import { lookupProfile } from "blockstack";
 import Error from "components/Error";
+import PostsTable from "components/Post/PostsTable";
 
 class UsernamePostsRoute extends Component {
     state = {
@@ -40,13 +41,19 @@ class UsernamePostsRoute extends Component {
         const options = { username, decrypt: false };
 
         try {
-            const posts = await userSession.getFile(POST_FILENAME, options)
+            const posts = await userSession.getFile(POST_FILENAME, options);
 
             if (posts) {
-                return this.setState({posts: JSON.parse(posts), loading: false})
+                return this.setState({
+                    posts: JSON.parse(posts),
+                    loading: false
+                });
             }
         } catch (e) {
-            return this.setState({loading: false, error: "User does not have any posts...."})
+            return this.setState({
+                loading: false,
+                error: "User does not have any posts...."
+            });
         }
     };
 
@@ -61,7 +68,13 @@ class UsernamePostsRoute extends Component {
             <Switch>
                 <Route
                     path={`/${match.params.username}/posts`}
-                    render={() => <div>Posts Table</div>}
+                    render={() => (
+                        <PostsTable
+                            posts={this.state.posts}
+                            username={match.params.username}
+                            type="public"
+                        />
+                    )}
                     exact
                 />
                 <Route
